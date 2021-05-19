@@ -5,12 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,8 +20,17 @@ public class MonthlyBilling {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long billingId;
 
     @NotBlank(message = "Date of Billing cannot be empty")
     private LocalDate date;
+
+    private BigDecimal grossEarnings;
+
+    private BigDecimal netEarnings;
+
+    private BigDecimal vat;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<MonthlyCost> monthlyCosts;
 }
