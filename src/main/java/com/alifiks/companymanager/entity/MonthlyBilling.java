@@ -1,5 +1,9 @@
 package com.alifiks.companymanager.entity;
 
+import com.alifiks.companymanager.serialization.CustomLocalDateDeserializer;
+import com.alifiks.companymanager.serialization.CustomLocalDateSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,12 +21,13 @@ import java.util.List;
 @Builder
 @Entity
 public class MonthlyBilling {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long billingId;
 
     @NotBlank(message = "Date of Billing cannot be empty")
+    @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @JsonDeserialize(using = CustomLocalDateDeserializer.class)
     private LocalDate date;
 
     private BigDecimal grossEarnings;
