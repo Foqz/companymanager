@@ -1,5 +1,7 @@
 package com.alifiks.companymanager.entity;
 
+import com.alifiks.companymanager.enumeration.CITType;
+import com.alifiks.companymanager.enumeration.VATType;
 import com.alifiks.companymanager.serialization.CustomLocalDateDeserializer;
 import com.alifiks.companymanager.serialization.CustomLocalDateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -35,6 +37,14 @@ public class MonthlyBilling {
     private BigDecimal netEarnings;
 
     private BigDecimal vat;
+
+    private BigDecimal citTax;
+
+    private BigDecimal earningsOnHand;
+
+    private CITType citType;
+
+    private VATType vatType;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<MonthlyCost> monthlyCosts;

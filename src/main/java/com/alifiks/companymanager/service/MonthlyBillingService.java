@@ -1,6 +1,5 @@
 package com.alifiks.companymanager.service;
 
-import com.alifiks.companymanager.constants.BillingConstants;
 import com.alifiks.companymanager.dto.MonthlyBillingRequest;
 import com.alifiks.companymanager.entity.MonthlyBilling;
 import com.alifiks.companymanager.repository.MonthlyBillingRepository;
@@ -16,6 +15,7 @@ import java.util.List;
 public class MonthlyBillingService {
 
     private final MonthlyBillingRepository monthlyBillingRepository;
+    private final TaxUtilsService taxUtilsService;
 
     public List<MonthlyBilling> getMonthlyBillingByDate(LocalDate date) {
         return monthlyBillingRepository.findAllByDate(date);
@@ -23,15 +23,28 @@ public class MonthlyBillingService {
 
     public MonthlyBilling saveMonthlyBilling(MonthlyBillingRequest monthlyBillingRequest) {
 
-        BigDecimal vatAmount = monthlyBillingRequest.getNetEarnings().multiply(BillingConstants.VAT_PL);
+        BigDecimal VATRate = taxUtilsService.getVATByType(monthlyBillingRequest.getVatType());
+        BigDecimal CITRate = taxUtilsService.getCITByType(monthlyBillingRequest.getCitType());
+        BigDecimal CITTax = monthlyBillingRequest.getNetEarnings().multiply(CITRate);
+
+        BigDecimal vatAmount = monthlyBillingRequest.getNetEarnings().multiply(VATRate);
 
         MonthlyBilling monthlyBilling = MonthlyBilling.builder()
                 .date(monthlyBillingRequest.getDate().withDayOfMonth(1))
                 .netEarnings(monthlyBillingRequest.getNetEarnings())
                 .vat(vatAmount)
                 .grossEarnings(monthlyBillingRequest.getNetEarnings().add(vatAmount))
+                .citTax(CITTax)
+                .earningsOnHand(calculateEarningsOnHand(monthlyBillingRequest.getNetEarnings(), CITTax))
+                .vatType(monthlyBillingRequest.getVatType())
+                .citType(monthlyBillingRequest.getCitType())
                 .build();
 
         return monthlyBillingRepository.save(monthlyBilling);
+    }
+
+    //TODO add costs
+    private BigDecimal calculateEarningsOnHand(BigDecimal netEarnings, BigDecimal CITTax) {
+        return netEarnings.subtract(CITTax);
     }
 }

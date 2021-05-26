@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "companymanager-front.developmentUrl",
+      "type": "java.lang.String",
+      "description": "Description for companymanager-front.developmentUrl."
+  }
+] }
