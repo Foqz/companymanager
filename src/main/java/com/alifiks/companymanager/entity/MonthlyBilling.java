@@ -36,9 +36,9 @@ public class MonthlyBilling {
 
     private BigDecimal netEarnings;
 
-    private BigDecimal vat;
+    private BigDecimal vatValue;
 
-    private BigDecimal citTax;
+    private BigDecimal citValue;
 
     private BigDecimal earningsOnHand;
 
