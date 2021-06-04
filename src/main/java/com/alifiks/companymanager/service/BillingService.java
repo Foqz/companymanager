@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -47,5 +48,16 @@ public class BillingService {
     //TODO add costs
     private BigDecimal calculateEarningsOnHand(BigDecimal netEarnings, BigDecimal CITTax) {
         return netEarnings.subtract(CITTax);
+    }
+
+    public Long deleteBilling(Long billingId) {
+        Optional<Billing> billingOptional = billingRepository.findById(billingId);
+        if (billingOptional.isPresent()) {
+            Billing billingToRemove = billingOptional.get();
+            billingRepository.delete(billingToRemove);
+            return billingId;
+        } else {
+            throw new RuntimeException("Could not find billing with id" + billingId);
+        }
     }
 }

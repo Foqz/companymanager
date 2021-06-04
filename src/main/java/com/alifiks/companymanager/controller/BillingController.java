@@ -33,4 +33,9 @@ public class BillingController {
         Billing billing =  billingService.saveBilling(billingRequest);
         return status(HttpStatus.CREATED).body(billing.getBillingId());
     }
+
+    @DeleteMapping
+    public ResponseEntity<Long> deleteBilling(@RequestParam Long billingId) {
+        return status(HttpStatus.OK).body(billingService.deleteBilling(billingId));
+    }
 }

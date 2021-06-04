@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BillingRequest {
 
+    private Long billingId;
+
     @NotBlank(message = "Date of Billing cannot be blank")
     private LocalDate date;
 
