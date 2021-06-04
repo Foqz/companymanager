@@ -11,4 +11,5 @@ public abstract class BillingConstants {
     public static final BigDecimal CIT_PROGRESSIVE_17 = new BigDecimal("0.17");
     public static final BigDecimal CIT_PROGRESSIVE_32 = new BigDecimal("0.32");
     public static final BigDecimal CIT_LUMP_15 = new BigDecimal("0.15");
+    public static final BigDecimal ZUS_NORMAL = new BigDecimal("1457.49");
 }

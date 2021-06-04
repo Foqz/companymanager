@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -18,15 +16,10 @@ public class BillingService {
 
     private final BillingRepository billingRepository;
     private final TaxUtilsService taxUtilsService;
+    private final BillingResponseService billingResponseService;
 
     public BillingResponse getMonthlyBillingResponse(LocalDate date) {
-        return BillingResponse.builder()
-                .billings(getMonthlyBillingByDate(date))
-                .build();
-    }
-
-    private List<Billing> getMonthlyBillingByDate(LocalDate date) {
-        return billingRepository.findAllByDateGreaterThanEqualAndDateLessThanEqual(date.with(TemporalAdjusters.firstDayOfMonth()), date.with(TemporalAdjusters.lastDayOfMonth()));
+        return billingResponseService.getMonthlyBillingResponse(date);
     }
 
     public Billing saveBilling(BillingRequest billingRequest) {
