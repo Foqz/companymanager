@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MonthlyCost {
+public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +20,5 @@ public class MonthlyCost {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billingId", referencedColumnName = "billingId")
-    private MonthlyBilling monthlyBilling;
+    private Billing billing;
 }

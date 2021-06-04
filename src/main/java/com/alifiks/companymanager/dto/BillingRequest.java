@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MonthlyBillingRequest {
+public class BillingRequest {
 
     @NotBlank(message = "Date of Billing cannot be blank")
     private LocalDate date;

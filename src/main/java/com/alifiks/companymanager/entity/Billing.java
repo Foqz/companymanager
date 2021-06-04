@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-public class MonthlyBilling {
+public class Billing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long billingId;
@@ -47,5 +47,5 @@ public class MonthlyBilling {
     private VATType vatType;
 
     @OneToMany(fetch = FetchType.LAZY)
-    private List<MonthlyCost> monthlyCosts;
+    private List<Expense> expenses;
 }
