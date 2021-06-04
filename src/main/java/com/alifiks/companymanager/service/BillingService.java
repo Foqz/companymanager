@@ -1,6 +1,7 @@
 package com.alifiks.companymanager.service;
 
 import com.alifiks.companymanager.dto.BillingRequest;
+import com.alifiks.companymanager.dto.BillingResponse;
 import com.alifiks.companymanager.entity.Billing;
 import com.alifiks.companymanager.repository.BillingRepository;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,13 @@ public class BillingService {
     private final BillingRepository billingRepository;
     private final TaxUtilsService taxUtilsService;
 
-    public List<Billing> getMonthlyBillingByDate(LocalDate date) {
+    public BillingResponse getMonthlyBillingResponse(LocalDate date) {
+        return BillingResponse.builder()
+                .billings(getMonthlyBillingByDate(date))
+                .build();
+    }
+
+    private List<Billing> getMonthlyBillingByDate(LocalDate date) {
         return billingRepository.findAllByDateGreaterThanEqualAndDateLessThanEqual(date.with(TemporalAdjusters.firstDayOfMonth()), date.with(TemporalAdjusters.lastDayOfMonth()));
     }
 
