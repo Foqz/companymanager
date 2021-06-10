@@ -3,6 +3,7 @@ package com.alifiks.companymanager.service;
 import com.alifiks.companymanager.dto.BillingRequest;
 import com.alifiks.companymanager.dto.BillingResponse;
 import com.alifiks.companymanager.entity.Billing;
+import com.alifiks.companymanager.exceptions.BillingCustomException;
 import com.alifiks.companymanager.repository.BillingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,7 +61,7 @@ public class BillingService {
             existingBilling.setCitType(billingRequest.getCitType());
             return billingRepository.save(existingBilling);
         } else {
-            throw new RuntimeException("Billing id not found during update");
+            throw new BillingCustomException("Billing id: " + billingRequest.getBillingId() + " not found during update");
         }
     }
 
@@ -76,7 +77,7 @@ public class BillingService {
             billingRepository.delete(billingToRemove);
             return billingId;
         } else {
-            throw new RuntimeException("Could not find billing with id" + billingId);
+            throw new BillingCustomException("Could not find billing with id" + billingId);
         }
     }
 

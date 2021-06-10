@@ -3,6 +3,8 @@ package com.alifiks.companymanager.service;
 import com.alifiks.companymanager.constants.BillingConstants;
 import com.alifiks.companymanager.enumeration.CITType;
 import com.alifiks.companymanager.enumeration.VATType;
+import com.alifiks.companymanager.exceptions.CitCustomException;
+import com.alifiks.companymanager.exceptions.VatCustomException;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,7 @@ public class TaxUtilsService {
             case VAT_PL:
                 return BillingConstants.VAT_PL;
             default:
-                throw new RuntimeException("Vat type not found");
+                throw new VatCustomException("Vat type not found");
         }
     }
 
@@ -32,7 +34,7 @@ public class TaxUtilsService {
             case LINEAR_19:
                 return BillingConstants.CIT_LINEAR_19;
             default:
-                throw new RuntimeException("CIT type not found");
+                throw new CitCustomException("CIT type not found");
         }
     }
 }
