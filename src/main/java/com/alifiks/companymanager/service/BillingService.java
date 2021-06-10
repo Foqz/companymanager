@@ -24,39 +24,43 @@ public class BillingService {
     }
 
     public Billing saveBilling(BillingRequest billingRequest) {
-
         BigDecimal vatPercentMultiplier = taxUtilsService.getVATByType(billingRequest.getVatType());
         BigDecimal citPercentMultiplier = taxUtilsService.getCITByType(billingRequest.getCitType());
         BigDecimal citValue = billingRequest.getNetEarnings().multiply(citPercentMultiplier);
         BigDecimal vatValue = billingRequest.getNetEarnings().multiply(vatPercentMultiplier);
 
-        if (billingRequest.getBillingId() != null) {
-            Optional<Billing> existingBillingOptional = billingRepository.findById(billingRequest.getBillingId());
-            if (existingBillingOptional.isPresent()) {
-                Billing existingBilling = existingBillingOptional.get();
-                existingBilling.setNetEarnings(billingRequest.getNetEarnings());
-                existingBilling.setVatValue(vatValue);
-                existingBilling.setGrossEarnings(billingRequest.getNetEarnings().add(vatValue));
-                existingBilling.setCitValue(citValue);
-                existingBilling.setEarningsOnHand(calculateEarningsOnHand(billingRequest.getNetEarnings(), citValue));
-                existingBilling.setVatType(billingRequest.getVatType());
-                existingBilling.setCitType(billingRequest.getCitType());
-                return billingRepository.save(existingBilling);
-            } else {
-                throw new RuntimeException("Billing id not found during update");
-            }
+        Billing billing = Billing.builder()
+                .date(billingRequest.getDate())
+                .netEarnings(billingRequest.getNetEarnings())
+                .vatValue(vatValue)
+                .grossEarnings(billingRequest.getNetEarnings().add(vatValue))
+                .citValue(citValue)
+                .earningsOnHand(calculateEarningsOnHand(billingRequest.getNetEarnings(), citValue))
+                .vatType(billingRequest.getVatType())
+                .citType(billingRequest.getCitType())
+                .build();
+        return billingRepository.save(billing);
+    }
+
+    public Billing updateBilling(BillingRequest billingRequest) {
+        BigDecimal vatPercentMultiplier = taxUtilsService.getVATByType(billingRequest.getVatType());
+        BigDecimal citPercentMultiplier = taxUtilsService.getCITByType(billingRequest.getCitType());
+        BigDecimal citValue = billingRequest.getNetEarnings().multiply(citPercentMultiplier);
+        BigDecimal vatValue = billingRequest.getNetEarnings().multiply(vatPercentMultiplier);
+
+        Optional<Billing> existingBillingOptional = billingRepository.findById(billingRequest.getBillingId());
+        if (existingBillingOptional.isPresent()) {
+            Billing existingBilling = existingBillingOptional.get();
+            existingBilling.setNetEarnings(billingRequest.getNetEarnings());
+            existingBilling.setVatValue(vatValue);
+            existingBilling.setGrossEarnings(billingRequest.getNetEarnings().add(vatValue));
+            existingBilling.setCitValue(citValue);
+            existingBilling.setEarningsOnHand(calculateEarningsOnHand(billingRequest.getNetEarnings(), citValue));
+            existingBilling.setVatType(billingRequest.getVatType());
+            existingBilling.setCitType(billingRequest.getCitType());
+            return billingRepository.save(existingBilling);
         } else {
-            Billing billing = Billing.builder()
-                    .date(billingRequest.getDate())
-                    .netEarnings(billingRequest.getNetEarnings())
-                    .vatValue(vatValue)
-                    .grossEarnings(billingRequest.getNetEarnings().add(vatValue))
-                    .citValue(citValue)
-                    .earningsOnHand(calculateEarningsOnHand(billingRequest.getNetEarnings(), citValue))
-                    .vatType(billingRequest.getVatType())
-                    .citType(billingRequest.getCitType())
-                    .build();
-            return billingRepository.save(billing);
+            throw new RuntimeException("Billing id not found during update");
         }
     }
 
@@ -75,4 +79,6 @@ public class BillingService {
             throw new RuntimeException("Could not find billing with id" + billingId);
         }
     }
+
+
 }

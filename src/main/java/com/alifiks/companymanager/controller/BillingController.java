@@ -29,9 +29,15 @@ public class BillingController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> saveBilling(@RequestBody BillingRequest billingRequest) {
-        Billing billing =  billingService.saveBilling(billingRequest);
-        return status(HttpStatus.CREATED).body(billing.getBillingId());
+    public ResponseEntity<Long> createBilling(@RequestBody BillingRequest billingRequest) {
+        Billing createdBilling =  billingService.saveBilling(billingRequest);
+        return status(HttpStatus.CREATED).body(createdBilling.getBillingId());
+    }
+
+    @PutMapping
+    public ResponseEntity<Long> updateBilling(@RequestBody BillingRequest billingRequest) {
+        Billing updatedBilling = billingService.updateBilling(billingRequest);
+        return status(HttpStatus.OK).body(updatedBilling.getBillingId());
     }
 
     @DeleteMapping
